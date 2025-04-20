@@ -89,8 +89,7 @@ for irow in range(20):
     # check whether coordinates must be adjusted or not, do this only for stations with both of their values of wmo_area_km2 and model_area_km2 defined
     need_adjustment = False
     if wmo_area_km2 > 0:
-        pcr.aguila(pcr.abs(model_area_km2 - wmo_area_km2))
-        error_area_km2 = pcr.cellvalue(pcr.mapmaximum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2, 1)[0]
+        error_area_km2, valid = pcr.cellvalue(pcr.mapmaximum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2, 1)
         print(error_area_km2)
         if error_area_km2 > 0.15: need_adjustment = True
     else:
