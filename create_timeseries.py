@@ -165,7 +165,7 @@ for irow in range(20):
 	    
 	    
         # - write the data frame to csv
-        csv_filename = csv_output_folder + "/" + "pcrglobwb_" + str(wmo_id) + "discharge_1991_2024.csv"  
+        csv_filename = csv_output_folder + "/" + "pcrglobwb_" + str(wmo_id) + "_discharge_1991_2024.csv"  
         df.to_csv(csv_filename, index = False)
     
     
