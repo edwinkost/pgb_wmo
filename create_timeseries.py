@@ -101,9 +101,9 @@ for irow in range(20):
         wmo_id_point = wmo_id_point_adjusted
     
     # get the model lon and lat coordinates, as well as the model catchment area
-    model_lon      = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, xcoord)        ), 1)
-    model_lat      = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1)
-    model_area_km2 = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1)
+    model_lon      = float(pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, xcoord)        ), 1))
+    model_lat      = float(pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1))
+    model_area_km2 = float(pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1))
     
     # put them in the dataframe
     wmo_station_table["model_lon"][irow]      = model_lon     
