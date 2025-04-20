@@ -57,11 +57,11 @@ model_area_km2 = pcr.catchmenttotal(area_m2, ldd_map) / (1000.*1000.)
 # - using only cell within the mask
 model_area_km2 = pcr.ifthen(pcr.defined(mask), model_area_km2)
 
+model_area_km2 = pcr.cover(model_area_km2, 0.0)
+
 # lon and lat coordinates of the model
 xcoord = pcr.xcoordinate(pcr.defined(model_area_km2))
 ycoord = pcr.ycoordinate(pcr.defined(model_area_km2))
-
-model_area_km2 = pcr.cover(model_area_km2, 0.0)
 
 # ~ for irow in range(len(wmo_station_table)):
     
