@@ -61,6 +61,7 @@ model_area_km2 = pcr.ifthen(pcr.defined(mask), model_area_km2)
 xcoord = pcr.xcoordinate(pcr.defined(model_area_km2))
 ycoord = pcr.ycoordinate(pcr.defined(model_area_km2))
 
+model_area_km2 = pcr.cover(model_area_km2, 0.0)
 
 # ~ for irow in range(len(wmo_station_table)):
     
