@@ -36,7 +36,7 @@ wmo_station_table["model_area_km2"] = pd.Series(dtype = "float")
 wmo_station_table["area_deviation"] = pd.Series(dtype = "float")
 
 # output folder for the time series
-csv_output_folder = "/scratch-shared/edwindan/test_wmo/"
+csv_output_folder = "/scratch-shared/edwindan/pgb_wmo_timeseries/"
 
 
 # ldd and cell areas used in the model
@@ -63,9 +63,9 @@ model_area_km2 = pcr.cover(model_area_km2, 0.0)
 xcoord = pcr.xcoordinate(pcr.defined(model_area_km2))
 ycoord = pcr.ycoordinate(pcr.defined(model_area_km2))
 
-# ~ for irow in range(len(wmo_station_table)):
-    
-for irow in range(20):
+
+for irow in range(len(wmo_station_table)):
+# ~ for irow in range(20):
 
     # get the station ids, coordinates, and catchment areas based on the table provided by WMO
     wmo_id       = wmo_station_table["id"][irow]
