@@ -91,7 +91,7 @@ for irow in range(20):
     if wmo_area_km2 > 0:
         error_area_km2, valid = pcr.cellvalue(pcr.mapmaximum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2, 1)
         print(error_area_km2)
-        if error_area_km2 > 0.15: need_adjustment = True
+        if abs(error_area_km2) > 0.15: need_adjustment = True
     else:
         need_adjustment = False
     
