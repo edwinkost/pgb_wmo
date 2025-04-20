@@ -124,7 +124,7 @@ for irow in range(len(wmo_station_table)):
     # check area_deviation
     area_deviation = (model_area_km2_this_station - wmo_area_km2) / wmo_area_km2
     
-    if abs(area_deviation) < 0.15:
+    if abs(area_deviation) < 10000000.:
 
         # ~ # put them in the dataframe
         # ~ wmo_station_table["model_lon"].loc[irow]      = model_lon     
