@@ -171,6 +171,6 @@ for irow in range(20):
     
 # write the station list to a csv file
 csv_station_list = csv_output_folder + "/" + "_station_list.csv"  
-df.to_csv(csv_station_list, index = False)
+wmo_station_table.to_csv(csv_station_list, index = False)
 
 
