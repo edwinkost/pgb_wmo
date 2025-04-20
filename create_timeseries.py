@@ -86,6 +86,8 @@ for irow in range(20):
     else:
         need_adjustment = False
     
+    print(need_adjustment)
+    
     # if coordinate adjustment is needed, find - within the 3x3 window - the cell with the model catchment area closest to wmo catchment area
     if need_adjustment:
 
