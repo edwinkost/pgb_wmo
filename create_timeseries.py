@@ -41,7 +41,7 @@ ldd_map_file = "/projects/0/dfguu/users/edwin/data/pcrglobwb_input_aqueduct/vers
 area_m2_file = "/projects/0/dfguu/users/edwin/data/pcrglobwb_input_aqueduct/version_2021-09-16/general/cdo_gridarea_clone_global_05min_correct_lats.nc.map"
 
 # set the pcraster clone based on the ldd
-pcr.setclone(lddmap_file)
+pcr.setclone(ldd_map_file)
 ldd_map = pcr.readmap(ldd_map_file)
 area_m2 = pcr.readmap(area_m2_file)
 
