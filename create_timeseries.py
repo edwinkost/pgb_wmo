@@ -99,7 +99,7 @@ for irow in range(20):
     if need_adjustment:
 
         # define the window
-        wmo_id_window = pcr.windowmaximum(wmo_id_point, pcr.clone().cellSize() * 3.0)
+        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), pcr.clone().cellSize() * 3.0))
         
         # calculate the catchment area error
         wmo_id_catchment_area_abs_error = pcr.ifthen(wmo_id_window, pcr.abs(model_area_km2 - wmo_area_km2))
@@ -134,7 +134,7 @@ for irow in range(20):
     print(wmo_station_table["area_deviation"][irow])
 
     # get the timeseries (using xarray)
-    if wmo_station_table.loc[irow, "area_deviation"] < 0.15:
+    if abs(wmo_station_table.loc[irow, "area_deviation"]) < 0.15:
         # - go to the selected clone and netcdf file
         mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)[0]
         mask_code   = 'M%07d' %(mask_for_this_station)
