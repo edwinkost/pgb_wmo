@@ -102,7 +102,7 @@ for irow in range(20):
     if need_adjustment:
 
         # define the window
-        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), pcr.clone().cellSize() * 50.0))
+        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), pcr.clone().cellSize() * 10.0))
         pcr.aguila(wmo_id_window)
         
         # calculate the catchment area error
