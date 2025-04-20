@@ -107,11 +107,18 @@ for irow in range(20):
     model_lat      = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1)[0]
     model_area_km2 = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1)[0]
     
+    # ~ # put them in the dataframe
+    # ~ wmo_station_table["model_lon"].loc[irow]      = model_lon     
+    # ~ wmo_station_table["model_lat"].loc[irow]      = model_lat     
+    # ~ wmo_station_table["model_area_km2"].loc[irow] = model_area_km2
+    # ~ wmo_station_table["area_deviation"].loc[irow] = (model_area_km2 - wmo_area_km2) / wmo_area_km2
+    # ~ print(wmo_station_table["area_deviation"][irow])
+
     # put them in the dataframe
-    wmo_station_table["model_lon"].loc[irow]      = model_lon     
-    wmo_station_table["model_lat"].loc[irow]      = model_lat     
-    wmo_station_table["model_area_km2"].loc[irow] = model_area_km2
-    wmo_station_table["area_deviation"].loc[irow] = (model_area_km2 - wmo_area_km2) / wmo_area_km2
+    wmo_station_table.loc[irow, "model_lon"]      = model_lon     
+    wmo_station_table.loc[irow, "model_lat"]      = model_lat     
+    wmo_station_table.loc[irow, "model_area_km2"] = model_area_km2
+    wmo_station_table.loc[irow, "area_deviation"] = (model_area_km2 - wmo_area_km2) / wmo_area_km2
     print(wmo_station_table["area_deviation"][irow])
 
     
