@@ -114,9 +114,9 @@ for irow in range(20):
         wmo_id_point = wmo_id_point_adjusted
     
     # get the model lon and lat coordinates, as well as the model catchment area
-    model_lon                   = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, xcoord)        ), 1)[0]
-    model_lat                   = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1)[0]
-    model_area_km2_this_station = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1)[0]
+    model_lon, valid                    = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, xcoord)        ), 1)
+    model_lat, valid                    = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1)
+    model_area_km2_this_station, valid  = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1)
     
     # ~ # put them in the dataframe
     # ~ wmo_station_table["model_lon"].loc[irow]      = model_lon     
@@ -138,7 +138,7 @@ for irow in range(20):
     # get the timeseries (using xarray)
     if abs(wmo_station_table.loc[irow, "area_deviation"]) < 0.15:
         # - go to the selected clone and netcdf file
-        mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)[0]
+        mask_for_this_station, valid = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)
         mask_code   = 'M%07d' %(mask_for_this_station)
         netcdf_file = model_output_folder + "/" + mask_code + "/netcdf/discharge_dailyTot_output.nc"     
         print(netcdf_file)
