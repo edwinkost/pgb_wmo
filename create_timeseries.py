@@ -61,7 +61,7 @@ ycoord = pcr.ycoordinate(pcr.defined(model_area_km2))
 
 # ~ for irow in range(len(wmo_station_table)):
     
-for irow in range(len(20)):
+for irow in range(20):
 
     # get the station ids, coordinates, and catchment areas based on the table provided by WMO
     wmo_id       = wmo_station_table_file["id"][irow]
