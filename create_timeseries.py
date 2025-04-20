@@ -139,7 +139,7 @@ for irow in range(20):
         print(model_lon)
         print(model_lat)    
         print(model_area_km2)    
-        print(wmo_station_table["area_deviation"][irow])
+        print(area_deviation)
 
 
         # - go to the selected clone and netcdf file
