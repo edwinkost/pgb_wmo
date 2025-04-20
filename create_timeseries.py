@@ -103,7 +103,7 @@ for irow in range(len(wmo_station_table)):
 
         # define the window
         wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), pcr.clone().cellSize() * 10.0))
-        pcr.aguila(wmo_id_window)
+        # ~ pcr.aguila(wmo_id_window)
         
         # calculate the catchment area error
         wmo_id_catchment_area_abs_error = pcr.ifthen(wmo_id_window, pcr.abs(model_area_km2 - wmo_area_km2))
