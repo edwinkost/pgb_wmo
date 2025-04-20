@@ -134,39 +134,39 @@ for irow in range(20):
 
     
     # get the timeseries (using xarray)
-    
-    # - go to the selected clone and netcdf file
-    mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)[0]
-    mask_code   = 'M%07d' %(mask_for_this_station)
-    netcdf_file = model_output_folder + "/" + mask_code + "/netcdf/discharge_dailyTot_output.nc"     
-    print(netcdf_file)
-    
-    # - pick the timeseris in the netcdf file using xarray
-    discharge_xr          = xr.open_dataset(netcdf_file)
-    discharge_time_series = discharge_xr.sel(lon = model_lon, lat = model_lat, method = 'nearest')
-    
-    # - using 1991-2024 only
-    discharge_time_series = discharge_time_series.sel(time=slice("1991-01-01", "2024-12-31"))
-
-    # - create the data frame
-    df = pd.DataFrame({\
-    'date': np.asarray(discharge_time_series["time"]),\
-    'discharge_m3persecond': np.asarray(discharge_time_series["discharge"])})
-    print(df)
-    
-
-    # ~ # write it to a file, see the following for the format
-    # ~ (pcrglobwb_python3_v20250207) edwindan@tcn578.local.snellius.surf.nl:/scratch-shared/edwindan/data/wmo_2024$ head -n 5 wflowsbm_2040000010_dis_1991_2024.csv
-    # ~ Date,Discharge
-    # ~ 1991-01-01,172.31717
-    # ~ 1991-01-02,169.47862
-    # ~ 1991-01-03,158.54332
-    # ~ 1991-01-04,165.56178
-
-
-    # - write the data frame to csv
-    csv_filename = csv_output_folder + "/" + "pcrglobwb_" + str(wmo_id) + "discharge_1991_2024.csv"  
-    df.to_csv(csv_filename, index = False)
+    if wmo_station_table.loc[irow, "area_deviation"] < 0.15:
+        # - go to the selected clone and netcdf file
+        mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)[0]
+        mask_code   = 'M%07d' %(mask_for_this_station)
+        netcdf_file = model_output_folder + "/" + mask_code + "/netcdf/discharge_dailyTot_output.nc"     
+        print(netcdf_file)
+        
+        # - pick the timeseris in the netcdf file using xarray
+        discharge_xr          = xr.open_dataset(netcdf_file)
+        discharge_time_series = discharge_xr.sel(lon = model_lon, lat = model_lat, method = 'nearest')
+        
+        # - using 1991-2024 only
+        discharge_time_series = discharge_time_series.sel(time=slice("1991-01-01", "2024-12-31"))
+	    
+        # - create the data frame
+        df = pd.DataFrame({\
+        'date': np.asarray(discharge_time_series["time"]),\
+        'discharge_m3persecond': np.asarray(discharge_time_series["discharge"])})
+        print(df)
+        
+	    
+        # ~ # write it to a file, see the following for the format
+        # ~ (pcrglobwb_python3_v20250207) edwindan@tcn578.local.snellius.surf.nl:/scratch-shared/edwindan/data/wmo_2024$ head -n 5 wflowsbm_2040000010_dis_1991_2024.csv
+        # ~ Date,Discharge
+        # ~ 1991-01-01,172.31717
+        # ~ 1991-01-02,169.47862
+        # ~ 1991-01-03,158.54332
+        # ~ 1991-01-04,165.56178
+	    
+	    
+        # - write the data frame to csv
+        csv_filename = csv_output_folder + "/" + "pcrglobwb_" + str(wmo_id) + "discharge_1991_2024.csv"  
+        df.to_csv(csv_filename, index = False)
     
     
 # write the station list to a csv file
