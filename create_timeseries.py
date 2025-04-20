@@ -11,7 +11,7 @@ import xarray as xr
 import pcraster as pcr
 import virtualOS as vos
 
-pd.options.mode.copy_on_write = True
+# ~ pd.options.mode.copy_on_write = True
 
 # ~ Steps:
 # ~ 1. Read the wmo table/dataframe
