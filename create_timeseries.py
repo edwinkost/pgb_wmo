@@ -69,6 +69,8 @@ for irow in range(len(20)):
     wmo_lat      = wmo_station_table_file["lat"][irow]
     wmo_area_km2 = wmo_station_table_file["area"][irow]
     
+    print(wmo_id)
+    
     # assign the station on the global map
     abs_lon_diff = pcr.abs(xcoord - pcr.scalar(wmo_lon))
     abs_lat_diff = pcr.abs(ycoord - pcr.scalar(wmo_lat))    
@@ -108,14 +110,16 @@ for irow in range(len(20)):
     wmo_station_table["model_lat"][irow]      = model_lat     
     wmo_station_table["model_area_km2"][irow] = model_area_km2
     wmo_station_table["area_deviation"][irow] = (model_area_km2 - wmo_area_km2) / wmo_area_km2
+    print(wmo_station_table["area_deviation"][irow])
 
     
     # get the timeseries (using xarray)
     
     # - go to the selected clone and netcdf file
-    mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask)), 1)
+    mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)
     mask_code   = 'M%07d' %(mask_for_this_station)
     netcdf_file = model_output_folder + "/" + mask_code + "/netcdf/discharge_dailyTot_output.nc"     
+    print(netcdf_file)
     
     # - pick the timeseris in the netcdf file using xarray
     discharge_xr          = xr.open_dataset(netcdf_file)
