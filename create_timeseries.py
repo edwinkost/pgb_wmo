@@ -89,7 +89,8 @@ for irow in range(20):
     # check whether coordinates must be adjusted or not, do this only for stations with both of their values of wmo_area_km2 and model_area_km2 defined
     need_adjustment = False
     if wmo_area_km2 > 0:
-        error_area_km2, valid = pcr.cellvalue(pcr.mapmaximum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2, 1)
+        
+        error_area_km2, valid = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2, 1)
         print(error_area_km2)
         if abs(error_area_km2) > 0.15: need_adjustment = True
     else:
@@ -97,7 +98,7 @@ for irow in range(20):
     
     print(need_adjustment)
     
-    # if coordinate adjustment is needed, find - within the 3x3 window - the cell with the model catchment area closest to wmo catchment area
+    # if coordinate adjustment is needed, find - within the surrounding cells - the cell with the model catchment area closest to wmo catchment area
     if need_adjustment:
 
         # define the window
@@ -118,25 +119,29 @@ for irow in range(20):
     model_lat, valid                    = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1)
     model_area_km2_this_station, valid  = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1)
     
-    # ~ # put them in the dataframe
-    # ~ wmo_station_table["model_lon"].loc[irow]      = model_lon     
-    # ~ wmo_station_table["model_lat"].loc[irow]      = model_lat     
-    # ~ wmo_station_table["model_area_km2"].loc[irow] = model_area_km2
-    # ~ wmo_station_table["area_deviation"].loc[irow] = (model_area_km2 - wmo_area_km2) / wmo_area_km2
-    # ~ print(wmo_station_table["area_deviation"][irow])
+    # check area_deviation
+    area_deviation = (model_area_km2_this_station - wmo_area_km2) / wmo_area_km2
+    
+    if abs(area_deviation) < 0.15:
 
-    # put them in the dataframe
-    wmo_station_table.loc[irow, "model_lon"]      = model_lon     
-    wmo_station_table.loc[irow, "model_lat"]      = model_lat     
-    wmo_station_table.loc[irow, "model_area_km2"] = model_area_km2_this_station
-    wmo_station_table.loc[irow, "area_deviation"] = (model_area_km2_this_station - wmo_area_km2) / wmo_area_km2
-    print(model_lon)
-    print(model_lat)    
-    print(model_area_km2)    
-    print(wmo_station_table["area_deviation"][irow])
+        # ~ # put them in the dataframe
+        # ~ wmo_station_table["model_lon"].loc[irow]      = model_lon     
+        # ~ wmo_station_table["model_lat"].loc[irow]      = model_lat     
+        # ~ wmo_station_table["model_area_km2"].loc[irow] = model_area_km2
+        # ~ wmo_station_table["area_deviation"].loc[irow] = (model_area_km2 - wmo_area_km2) / wmo_area_km2
+        # ~ print(wmo_station_table["area_deviation"][irow])
+	    
+        # put them in the dataframe
+        wmo_station_table.loc[irow, "model_lon"]      = model_lon     
+        wmo_station_table.loc[irow, "model_lat"]      = model_lat     
+        wmo_station_table.loc[irow, "model_area_km2"] = model_area_km2_this_station
+        wmo_station_table.loc[irow, "area_deviation"] = area_deviation
+        print(model_lon)
+        print(model_lat)    
+        print(model_area_km2)    
+        print(wmo_station_table["area_deviation"][irow])
 
-    # get the timeseries (using xarray)
-    if abs(wmo_station_table.loc[irow, "area_deviation"]) < 0.15:
+
         # - go to the selected clone and netcdf file
         mask_for_this_station, valid = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)
         mask_code   = 'M%07d' %(mask_for_this_station)
