@@ -80,7 +80,9 @@ for irow in range(20):
     abs_lon_diff = pcr.abs(xcoord - pcr.scalar(wmo_lon))
     pcr.aguila(abs_lon_diff)
     abs_lat_diff = pcr.abs(ycoord - pcr.scalar(wmo_lat))    
+    pcr.aguila(abs_lat_diff)
     wmo_id_point = pcr.ifthen(abs_lon_diff == pcr.mapminimum(abs_lon_diff), pcr.ifthen(abs_lat_diff == pcr.mapminimum(abs_lat_diff), pcr.boolean(1.0)))
+    pcr.aguila(wmo_id_point)
     
     # check whether coordinates must be adjusted or not, do this only for stations with both of their values of wmo_area_km2 and model_area_km2 defined
     need_adjustment = False
