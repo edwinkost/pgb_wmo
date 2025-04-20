@@ -19,6 +19,8 @@ import virtualOS as vos
 # ~    - If error > 15%: Search within 3x3 window find a point with the error < 15%
 # ~    - Create the time series file. 
 
+# model output folder
+model_output_folder = "/scratch-shared/edwin/pcrglobwb_wmo_run/v20250417"
 
 # WMO table containing station info
 wmo_station_table_file = "data/streamflow_stations.csv"
@@ -30,6 +32,9 @@ wmo_station_table["model_lat"]      = pd.Series(dtype = "float")
 wmo_station_table["model_area_km2"] = pd.Series(dtype = "float")
 wmo_station_table["area_deviation"] = pd.Series(dtype = "float")
 
+# output folder for the time series
+csv_output_folder = "/scratch-shared/edwindan/test_wmo/"
+
 
 # ldd and cell areas used in the model
 ldd_map_file = "/projects/0/dfguu/users/edwin/data/pcrglobwb_input_aqueduct/version_2021-09-16/general/lddsound_05min_version_20210330.map"
@@ -37,20 +42,27 @@ area_m2_file = "/projects/0/dfguu/users/edwin/data/pcrglobwb_input_aqueduct/vers
 
 # set the pcraster clone based on the ldd
 pcr.setclone(lddmap_file)
-ldd_map =
-area_m2 = 
+ldd_map = pcr.readmap(ldd_map_file)
+area_m2 = pcr.readmap(area_m2_file)
+
+# mask_classes used during the parallelization
+mask_parallel_run_file = "/projects/0/dfguu/users/edwin/data/pcrglobwb_input_aqueduct/version_2021-09-16/general/cloneMaps/global_parallelization/mask5minFromTop.map"
+mask = pcr.readmap(mask_parallel_run_file)
 
 # calculate catchment areas in km2
 model_area_km2 = pcr.catchmenttotal(area_m2, ldd_map) / (1000.*1000.)
+# - using only cell within the mask
+model_area_km2 = pcr.ifthen(pcr.defined(mask), model_area_km2)
 
 # lon and lat coordinates of the model
 xcoord = pcr.xcoordinate(pcr.defined(model_area_km2))
 ycoord = pcr.ycoordinate(pcr.defined(model_area_km2))
 
 
-
-for irow in range(len(wmo_station_table)):
+# ~ for irow in range(len(wmo_station_table)):
     
+for irow in range(len(20)):
+
     # get the station ids, coordinates, and catchment areas based on the table provided by WMO
     wmo_id       = wmo_station_table_file["id"][irow]
     wmo_lon      = wmo_station_table_file["lon"][irow]
@@ -62,6 +74,7 @@ for irow in range(len(wmo_station_table)):
     abs_lat_diff = pcr.abs(ycoord - pcr.scalar(wmo_lat))    
     wmo_id_point = pcr.ifthen(abs_lon_diff == pcr.mapminimum(abs_lon_diff), abs_lat_diff == pcr.mapminimum(abs_lat_diff), pcr.boolean(1.0))
     
+    # check whether coordinates must be adjusted or not, do this only for stations with both of their values of wmo_area_km2 and model_area_km2 defined
     need_coordinate_adjustment = False
     if wmo_area_km2 > 0:
         error_area_km2 = pcr.mapmaximum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2
@@ -69,22 +82,26 @@ for irow in range(len(wmo_station_table)):
     else:
         need_adjustment = False
     
+    # if coordinate adjustment is needed, find - within the 3x3 window - the cell with the model catchment area closest to wmo catchment area
     if need_adjustment:
 
-        wmo_id_window = pcr.windowmaximum(wmo_id_point, pcr.clone.cellsize() * 3.0)
+        # define the window
+        wmo_id_window = pcr.windowmaximum(wmo_id_point, pcr.clone().cellSize() * 3.0)
         
+        # calculate the catchment area error
         wmo_id_catchment_area_abs_error = pcr.ifthen(wmo_id_window, pcr.abs(model_area_km2 - wmo_area_km2))
         
+        # sort from the lowest error
         wmo_id_catchment_area_abs_error_areaorder = pcr.areaorder(wmo_id_catchment_area_abs_error, wmo_id_window)  
 
+        # pick the cell with the lost error and use it
         wmo_id_point_adjusted = pcr.ifthen(wmo_id_catchment_area_abs_error_areaorder == 1, pcr.boolean(1.0))
-        
         wmo_id_point = wmo_id_point_adjusted
     
     # get the model lon and lat coordinates, as well as the model catchment area
-    model_lon      = pcr.ifthen(wmo_id_point, xcoord) 
-    model_lat      = pcr.ifthen(wmo_id_point, ycoord)
-    model_area_km2 = pcr.ifthen(wmo_id_point, model_area_km2)
+    model_lon      = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, xcoord)        ), 1)
+    model_lat      = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1)
+    model_area_km2 = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1)
     
     # put them in the dataframe
     wmo_station_table["model_lon"][irow]      = model_lon     
@@ -94,14 +111,42 @@ for irow in range(len(wmo_station_table)):
 
     
     # get the timeseries (using xarray)
-    # - go to the selected clone and output directorty
-    # - pick the values in the netcdf file using xarray
     
-    # write it to a file, see the following for the format
+    # - go to the selected clone and netcdf file
+    mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask)), 1)
+    mask_code   = 'M%07d' %(mask_for_this_station)
+    netcdf_file = model_output_folder + "/" + mask_code + "/netcdf/discharge_dailyTot_output.nc"     
+    
+    # - pick the timeseris in the netcdf file using xarray
+    discharge_xr          = xr.open_dataset(netcdf_file)
+    discharge_time_series = discharge_xr.sel(lon = model_lon, lat = model_lat, method = 'nearest')
+    
+    # - using 1991-2024 only
+    discharge_time_series = discharge_time_series.sel(time=slice("1991-01-01", "2024-12-31"))
+
+    # - create the data frame
+    df = pd.DataFrame({\
+    'date': np.asarray(discharge_time_series["time"]),\
+    'discharge_m3persecond': np.asarray(discharge_time_series["discharge"])})
+    print(df)
+    
+
+    # ~ # write it to a file, see the following for the format
     # ~ (pcrglobwb_python3_v20250207) edwindan@tcn578.local.snellius.surf.nl:/scratch-shared/edwindan/data/wmo_2024$ head -n 5 wflowsbm_2040000010_dis_1991_2024.csv
     # ~ Date,Discharge
     # ~ 1991-01-01,172.31717
     # ~ 1991-01-02,169.47862
     # ~ 1991-01-03,158.54332
     # ~ 1991-01-04,165.56178
+
+
+    # - write the data frame to csv
+    csv_filename = csv_output_folder + "/" + "pcrglobwb_" + str(wmo_id) + "discharge_1991_2024.csv"  
+    df.to_csv(csv_filename, index = False)
+    
+    
+# write the station list to a csv file
+csv_station_list = csv_output_folder + "/" + "_station_list.csv"  
+df.to_csv(csv_station_list, index = False)
+
 
