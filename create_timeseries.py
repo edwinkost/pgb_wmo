@@ -77,10 +77,10 @@ for irow in range(20):
     wmo_id_point = pcr.ifthen(abs_lon_diff == pcr.mapminimum(abs_lon_diff), pcr.ifthen(abs_lat_diff == pcr.mapminimum(abs_lat_diff), pcr.boolean(1.0)))
     
     # check whether coordinates must be adjusted or not, do this only for stations with both of their values of wmo_area_km2 and model_area_km2 defined
-    need_coordinate_adjustment = False
+    need_adjustment = False
     if wmo_area_km2 > 0:
         error_area_km2 = pcr.mapmaximum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2
-        if error_area_km2 > 0.15: need_coordinate_adjustment = True
+        if error_area_km2 > 0.15: need_adjustment = True
     else:
         need_adjustment = False
     
