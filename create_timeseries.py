@@ -11,6 +11,8 @@ import xarray as xr
 import pcraster as pcr
 import virtualOS as vos
 
+pd.options.mode.copy_on_write = True
+
 # ~ Steps:
 # ~ 1. Read the wmo table/dataframe
 # ~ 2. Loop through all stations
@@ -116,7 +118,7 @@ for irow in range(20):
     # get the timeseries (using xarray)
     
     # - go to the selected clone and netcdf file
-    mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)
+    mask_for_this_station = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)[0]
     mask_code   = 'M%07d' %(mask_for_this_station)
     netcdf_file = model_output_folder + "/" + mask_code + "/netcdf/discharge_dailyTot_output.nc"     
     print(netcdf_file)
