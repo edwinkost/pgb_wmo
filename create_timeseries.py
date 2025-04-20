@@ -72,6 +72,9 @@ for irow in range(20):
     wmo_area_km2 = wmo_station_table["area"][irow]
     
     print(wmo_id)
+    print(wmo_lon)
+    print(wmo_lat)
+    print(wmo_area_km2)    
     
     # assign the station on the global map
     abs_lon_diff = pcr.abs(xcoord - pcr.scalar(wmo_lon))
