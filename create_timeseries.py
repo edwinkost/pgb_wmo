@@ -111,9 +111,9 @@ for irow in range(20):
         wmo_id_point = wmo_id_point_adjusted
     
     # get the model lon and lat coordinates, as well as the model catchment area
-    model_lon      = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, xcoord)        ), 1)[0]
-    model_lat      = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1)[0]
-    model_area_km2 = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1)[0]
+    model_lon                   = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, xcoord)        ), 1)[0]
+    model_lat                   = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, ycoord)        ), 1)[0]
+    model_area_km2_this_station = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, model_area_km2)), 1)[0]
     
     # ~ # put them in the dataframe
     # ~ wmo_station_table["model_lon"].loc[irow]      = model_lon     
@@ -125,8 +125,8 @@ for irow in range(20):
     # put them in the dataframe
     wmo_station_table.loc[irow, "model_lon"]      = model_lon     
     wmo_station_table.loc[irow, "model_lat"]      = model_lat     
-    wmo_station_table.loc[irow, "model_area_km2"] = model_area_km2
-    wmo_station_table.loc[irow, "area_deviation"] = (model_area_km2 - wmo_area_km2) / wmo_area_km2
+    wmo_station_table.loc[irow, "model_area_km2"] = model_area_km2_this_station
+    wmo_station_table.loc[irow, "area_deviation"] = (model_area_km2_this_station - wmo_area_km2) / wmo_area_km2
     print(model_lon)
     print(model_lat)    
     print(model_area_km2)    
