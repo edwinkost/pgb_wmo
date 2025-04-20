@@ -138,7 +138,7 @@ for irow in range(20):
         wmo_station_table.loc[irow, "area_deviation"] = area_deviation
         print(model_lon)
         print(model_lat)    
-        print(model_area_km2)    
+        print(model_area_km2_this_station)    
         print(area_deviation)
 
 
