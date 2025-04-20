@@ -102,7 +102,8 @@ for irow in range(len(wmo_station_table)):
     if need_adjustment:
 
         # define the window
-        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), pcr.clone().cellSize() * 10.0))
+        # ~ wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), pcr.clone().cellSize() * 10.0))
+        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), 0.50))
         # ~ pcr.aguila(wmo_id_window)
         
         # calculate the catchment area error
