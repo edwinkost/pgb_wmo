@@ -127,13 +127,13 @@ for irow in range(len(wmo_station_table)):
     # calculate area_deviation, do not use it if the deviation is large
     use_this_station = True
     area_deviation = (model_area_km2_this_station - wmo_area_km2) / wmo_area_km2
-    if abs(area_deviation) > 100 or np.isnan(area_deviation): use_this_station = False
+    if abs(area_deviation) > 100. or np.isnan(area_deviation): use_this_station = False
     
     # - check where the mask for this
     mask_for_this_station, valid = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)
-    if mask_for_this_station < 0: use_this_station = False
+    if mask_for_this_station < 0.: use_this_station = False
 
-    if use_this_station:
+    if use_this_station and :
 
     # ~ use_all = True
     # ~ if use_all:
