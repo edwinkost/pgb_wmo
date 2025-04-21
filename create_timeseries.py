@@ -191,7 +191,7 @@ for irow in range(len(wmo_station_table)):
     
 
     # write the station list to a csv file
-    csv_station_list = csv_output_folder + "/" + "_station_list.csv"  
+    csv_station_list = csv_output_folder + "/" + "_pcrglobwb_wmo_station_list.csv"  
     wmo_station_table.to_csv(csv_station_list, index = False)
 
 
