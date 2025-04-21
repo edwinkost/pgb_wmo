@@ -189,9 +189,9 @@ for irow in range(len(wmo_station_table)):
         csv_filename = csv_output_folder + "/" + "pcrglobwb_" + str(wmo_id) + "_discharge_1991_2024.csv"  
         df.to_csv(csv_filename, index = False)
     
-    
-# write the station list to a csv file
-csv_station_list = csv_output_folder + "/" + "_station_list.csv"  
-wmo_station_table.to_csv(csv_station_list, index = False)
+
+    # write the station list to a csv file
+    csv_station_list = csv_output_folder + "/" + "_station_list.csv"  
+    wmo_station_table.to_csv(csv_station_list, index = False)
 
 
