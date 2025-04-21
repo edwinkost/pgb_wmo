@@ -28,8 +28,9 @@ model_output_folder = "/scratch-shared/edwin/pcrglobwb_wmo_run/v20250417"
 # WMO table containing station info
 wmo_station_table_file = "data/streamflow_stations.csv"
 wmo_station_table_ori = pd.read_csv(wmo_station_table_file)
-# - sort by upstream area, small first, NaN at the bottom
-wmo_station_table = wmo_station_table_ori.sort_values("area", ignore_index = True, na_position = "first")
+# - sort by upstream area
+# ~ wmo_station_table = wmo_station_table_ori.sort_values("area", ignore_index = True, na_position = "first")
+wmo_station_table = wmo_station_table_ori.sort_values("area", ascending = False, ignore_index = True, na_position = "last")
 
 # add the following columns to the dataframe 
 wmo_station_table["model_lon"]      = pd.Series(dtype = "float")
