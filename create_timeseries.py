@@ -93,7 +93,7 @@ for irow in range(len(wmo_station_table)):
         
         error_area_km2, valid = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2, 1)
         print(error_area_km2)
-        if abs(error_area_km2) > 0.15: need_adjustment = True
+        if abs(error_area_km2) > 0.25: need_adjustment = True
     else:
         need_adjustment = False
     
@@ -104,7 +104,7 @@ for irow in range(len(wmo_station_table)):
 
         # define the window
         # ~ wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), pcr.clone().cellSize() * 10.0))
-        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), 0.50))
+        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), 1.00))
         # ~ pcr.aguila(wmo_id_window)
         
         # calculate the catchment area error
@@ -125,7 +125,10 @@ for irow in range(len(wmo_station_table)):
     # calculate area_deviation
     area_deviation = (model_area_km2_this_station - wmo_area_km2) / wmo_area_km2
     
-    if abs(area_deviation) < 100.:
+    # - check where the mask for this
+    mask_for_this_station, valid = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)
+
+    if abs(area_deviation) < 100. and mask_for_this_station < 100.:
 
     # ~ use_all = True
     # ~ if use_all:
