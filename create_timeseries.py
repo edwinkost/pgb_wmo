@@ -27,7 +27,9 @@ model_output_folder = "/scratch-shared/edwin/pcrglobwb_wmo_run/v20250417"
 
 # WMO table containing station info
 wmo_station_table_file = "data/streamflow_stations.csv"
-wmo_station_table = pd.read_csv(wmo_station_table_file)
+wmo_station_table_ori = pd.read_csv(wmo_station_table_file)
+# - sort by upstream area, small first, NaN at the bottom
+wmo_station_table = wmo_station_table.sort_values("area")
 
 # add the following columns to the dataframe 
 wmo_station_table["model_lon"]      = pd.Series(dtype = "float")
@@ -93,7 +95,7 @@ for irow in range(len(wmo_station_table)):
         
         error_area_km2, valid = pcr.cellvalue(pcr.mapminimum(pcr.ifthen(wmo_id_point, pcr.abs(model_area_km2 - wmo_area_km2))) / wmo_area_km2, 1)
         print(error_area_km2)
-        if abs(error_area_km2) > 0.25: need_adjustment = True
+        if abs(error_area_km2) > 0.20: need_adjustment = True
     else:
         need_adjustment = False
     
@@ -104,7 +106,7 @@ for irow in range(len(wmo_station_table)):
 
         # define the window
         # ~ wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), pcr.clone().cellSize() * 10.0))
-        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), 1.00))
+        wmo_id_window = pcr.boolean(pcr.windowmaximum(pcr.scalar(wmo_id_point), 0.75))
         # ~ pcr.aguila(wmo_id_window)
         
         # calculate the catchment area error
