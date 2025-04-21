@@ -128,7 +128,7 @@ for irow in range(len(wmo_station_table)):
     # calculate area_deviation, do not use it if the deviation is large
     use_this_station = True
     area_deviation = (model_area_km2_this_station - wmo_area_km2) / wmo_area_km2
-    if abs(area_deviation) > 100.: use_this_station = False
+    if abs(area_deviation) > 5.: use_this_station = False
     # - also do not use if if area_deviation cannot be calculated
     if np.isnan(np.array(float(area_deviation))): use_this_station = False
     
