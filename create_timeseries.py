@@ -36,7 +36,7 @@ wmo_station_table["model_area_km2"] = pd.Series(dtype = "float")
 wmo_station_table["area_deviation"] = pd.Series(dtype = "float")
 
 # output folder for the time series
-csv_output_folder = "/scratch-shared/edwindan/pcrglobwb_for_wmo_timeseries_v20250417/"
+csv_output_folder = "/scratch-shared/edwindan/pcrglobwb_for_wmo_timeseries_v20250417/2nd_try/"
 # ~ csv_output_folder = "/scratch-shared/edwindan/pcrglobwb_for_wmo_timeseries_v20250417_test/"
 
 
