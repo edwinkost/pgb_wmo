@@ -36,7 +36,7 @@ wmo_station_table = wmo_station_table_ori.sort_values("area", ascending = False,
 wmo_station_table["model_lon"]      = pd.Series(dtype = "float")
 wmo_station_table["model_lat"]      = pd.Series(dtype = "float")
 wmo_station_table["model_area_km2"] = pd.Series(dtype = "float")
-wmo_station_table["area_deviation"] = pd.Series(dtype = "float")
+wmo_station_table["area_deviation_in_percent"] = pd.Series(dtype = "float")
 
 # output folder for the time series
 csv_output_folder = "/scratch-shared/edwindan/pcrglobwb_for_wmo_timeseries_v20250417/2nd_try/"
@@ -142,18 +142,11 @@ for irow in range(len(wmo_station_table)):
     # ~ use_all = True
     # ~ if use_all:
 
-        # ~ # put them in the dataframe
-        # ~ wmo_station_table["model_lon"].loc[irow]      = model_lon     
-        # ~ wmo_station_table["model_lat"].loc[irow]      = model_lat     
-        # ~ wmo_station_table["model_area_km2"].loc[irow] = model_area_km2
-        # ~ wmo_station_table["area_deviation"].loc[irow] = (model_area_km2 - wmo_area_km2) / wmo_area_km2
-        # ~ print(wmo_station_table["area_deviation"][irow])
-	    
         # put them in the dataframe
         wmo_station_table.loc[irow, "model_lon"]      = model_lon     
         wmo_station_table.loc[irow, "model_lat"]      = model_lat     
         wmo_station_table.loc[irow, "model_area_km2"] = model_area_km2_this_station
-        wmo_station_table.loc[irow, "area_deviation"] = area_deviation
+        wmo_station_table.loc[irow, "area_deviation_in_percent"] = area_deviation * 100.
         print(model_lon)
         print(model_lat)    
         print(model_area_km2_this_station)    
