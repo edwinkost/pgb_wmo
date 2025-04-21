@@ -135,6 +135,7 @@ for irow in range(len(wmo_station_table)):
     mask_for_this_station, valid = pcr.cellvalue(pcr.mapmaximum(pcr.scalar(pcr.ifthen(wmo_id_point, mask))), 1)
     if mask_for_this_station < 0.: use_this_station = False
 
+    print(use_this_station)
     if use_this_station:
 
     # ~ use_all = True
