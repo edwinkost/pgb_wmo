@@ -206,6 +206,8 @@ for irow in range(len(wmo_station_table)):
             mode = "w" ; header = True
             if year > strt_year: mode = "a" ; header = False
             df.to_csv(csv_filename, index = False, mode = mode, header = header)
+        
+        print(csv_filename)    
 
     # write the station list to a csv file
     csv_station_list = csv_output_folder + "/" + "_pcrglobwb_wmo_station_list.csv"  
