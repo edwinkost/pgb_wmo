@@ -75,7 +75,7 @@ ycoord = pcr.ycoordinate(pcr.defined(model_area_km2))
 
 
 # netcdf file
-netcdf_file = model_output_folder + "/" + "dynqual_waterTemp_daily_1991-2025.nc"
+netcdf_file = model_output_folder + "/" + "dynqual_waterTemp_daily_1991-2025_uncompressed.nc"
 print(netcdf_file)
 water_temperature_xr          = xr.open_dataset(netcdf_file)
 
