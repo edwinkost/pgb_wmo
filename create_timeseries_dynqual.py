@@ -62,8 +62,8 @@ area_m2 = pcr.readmap(area_m2_file)
 
 # calculate catchment areas in km2
 model_area_km2 = pcr.catchmenttotal(area_m2, ldd_map) / (1000.*1000.)
-# - using only cell within the mask
-model_area_km2 = pcr.ifthen(pcr.defined(mask), model_area_km2)
+#~ # - using only cell within the mask
+#~ model_area_km2 = pcr.ifthen(pcr.defined(mask), model_area_km2)
 
 model_area_km2 = pcr.cover(model_area_km2, 0.0)
 
