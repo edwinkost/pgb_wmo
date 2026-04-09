@@ -174,7 +174,7 @@ for irow in range(len(wmo_station_table)):
         for year in range(strt_year, last_year+1): 
         
             # netcdf filename (example: /scratch/depfg/sutan101/wmo_2025/pcrglobwb/source_from_bram/M01/periods/20250101-20251231/netcdf/discharge_dailyTot_output.nc)
-            netcdf_file = model_output_folder + "/" + mask_code + "/" + str(year) + "0101-" + str(year) + "1231/" + "/netcdf/discharge_dailyTot_output.nc"     
+            netcdf_file = model_output_folder + "/" + mask_code + "/periods/" + str(year) + "0101-" + str(year) + "1231/" + "/netcdf/discharge_dailyTot_output.nc"     
             print(netcdf_file)
             
             # - pick the timeseris in the netcdf file using xarray
