@@ -202,10 +202,10 @@ for irow in range(len(wmo_station_table)):
 	        
             # - write the data frame to csv
             csv_filename = csv_output_folder + "/" + "pcrglobwb_" + str(wmo_id) + "_discharge_1991_2025.csv"  
-            # - append if not 
-            append = False
-            if year > strt_year: append = True
-            df.to_csv(csv_filename, index = False, append = append)
+            # - append if not the first year
+            mode = "w" ; header = True
+            if year > strt_year: mode = "w" ; header = False
+            df.to_csv(csv_filename, index = False, mode = mode, header = header)
 
     # write the station list to a csv file
     csv_station_list = csv_output_folder + "/" + "_pcrglobwb_wmo_station_list.csv"  
