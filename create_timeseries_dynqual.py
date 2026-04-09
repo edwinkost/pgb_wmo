@@ -189,6 +189,8 @@ for irow in range(len(wmo_station_table)):
         # - write the data frame to csv
         csv_filename = csv_output_folder + "/" + "dynqual_" + str(wmo_id) + "_water-temperature_1991_2025.csv"  
         df.to_csv(csv_filename, index = False)
+        
+        print(csv_filename)
     
 
     # write the station list to a csv file
