@@ -181,8 +181,9 @@ for irow in range(len(wmo_station_table)):
             discharge_xr          = xr.open_dataset(netcdf_file)
             discharge_time_series = discharge_xr.sel(lon = model_lon, lat = model_lat, method = 'nearest')
             
-            # - using 1991-2024 only
-            discharge_time_series = discharge_time_series.sel(time=slice("1991-01-01", "2024-12-31"))
+            strt_date = str(year) + "-01-01"
+            last_date = str(year) + "-12-31"
+            discharge_time_series = discharge_time_series.sel(time=slice(strt_date, last_date))
 	        
             # - create the data frame
             df = pd.DataFrame({\
@@ -190,7 +191,6 @@ for irow in range(len(wmo_station_table)):
             'discharge_m3persecond': np.asarray(discharge_time_series["discharge"])})
             print(df)
         
-	    
             # ~ # write it to a file, see the following for the format
             # ~ (pcrglobwb_python3_v20250207) edwindan@tcn578.local.snellius.surf.nl:/scratch-shared/edwindan/data/wmo_2024$ head -n 5 wflowsbm_2040000010_dis_1991_2024.csv
             # ~ Date,Discharge
@@ -198,7 +198,6 @@ for irow in range(len(wmo_station_table)):
             # ~ 1991-01-02,169.47862
             # ~ 1991-01-03,158.54332
             # ~ 1991-01-04,165.56178
-	        
 	        
             # - write the data frame to csv
             csv_filename = csv_output_folder + "/" + "pcrglobwb_" + str(wmo_id) + "_discharge_1991_2025.csv"  
