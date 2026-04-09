@@ -74,6 +74,12 @@ xcoord = pcr.xcoordinate(pcr.defined(model_area_km2))
 ycoord = pcr.ycoordinate(pcr.defined(model_area_km2))
 
 
+# netcdf file
+netcdf_file = model_output_folder + "/" + "dynqual_waterTemp_daily_1991-2025.nc"
+print(netcdf_file)
+water_temperature_xr          = xr.open_dataset(netcdf_file)
+
+
 for irow in range(len(wmo_station_table)):
 # ~ for irow in range(20):
 
@@ -144,7 +150,7 @@ for irow in range(len(wmo_station_table)):
 
     print(use_this_station)
     if use_this_station:
-
+        
     # ~ use_all = True
     # ~ if use_all:
 
@@ -159,12 +165,7 @@ for irow in range(len(wmo_station_table)):
         print(area_deviation)
 
 
-        # netcdf file
-        netcdf_file = model_output_folder + "/" + "dynqual_waterTemp_daily_1991-2025.nc"
-        print(netcdf_file)
-        
         # - pick the timeseris in the netcdf file using xarray
-        water_temperature_xr          = xr.open_dataset(netcdf_file)
         water_temperature_time_series = water_temperature_xr.sel(lon = model_lon, lat = model_lat, method = 'nearest')
         
         # - using 1991-2025 only
