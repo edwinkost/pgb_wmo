@@ -57,7 +57,7 @@ ldd_map = pcr.readmap(ldd_map_file)
 area_m2 = pcr.readmap(area_m2_file)
 
 # mask, used to define the model area
-mask_file = /scratch/depfg/sutan101/wmo_2025/dynqual/source_from_ed/landmask_from_first_timestep_dynqual_waterTemp_daily_1991_2025.nc.map
+mask_file = "/scratch/depfg/sutan101/wmo_2025/dynqual/source_from_ed/landmask_from_first_timestep_dynqual_waterTemp_daily_1991_2025.nc.map"
 mask = pcr.readmap(mask_file)
 
 # calculate catchment areas in km2
