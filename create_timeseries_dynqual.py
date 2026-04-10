@@ -56,11 +56,9 @@ pcr.setclone(ldd_map_file)
 ldd_map = pcr.readmap(ldd_map_file)
 area_m2 = pcr.readmap(area_m2_file)
 
-#~ # mask_classes used during the parallelization
-#~ mask_parallel_run_file = "/projects/0/dfguu/users/edwin/data/pcrglobwb_input_aqueduct/version_2021-09-16/general/cloneMaps/global_parallelization/mask5minFromTop.map"
-#~ mask = pcr.readmap(mask_parallel_run_file)
-
-mask = pcr.defined(ldd_map)
+# mask, used to define the model area
+mask_file = /scratch/depfg/sutan101/wmo_2025/dynqual/source_from_ed/landmask_from_first_timestep_dynqual_waterTemp_daily_1991_2025.nc.map
+mask = pcr.readmap(mask_file)
 
 # calculate catchment areas in km2
 model_area_km2 = pcr.catchmenttotal(area_m2, ldd_map) / (1000.*1000.)
